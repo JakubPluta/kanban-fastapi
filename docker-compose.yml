@@ -1,0 +1,16 @@
+# @format
+
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: Pa$$word!
+    ports:
+      - 5432:5432
+volumes:
+  postgresdata:

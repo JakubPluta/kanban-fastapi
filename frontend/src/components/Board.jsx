@@ -21,7 +21,7 @@ const Board = (props) => {
     const fetchBoards = async () => {
 
         try {
-            const response = await axios.get('/board')
+            const response = await axios.get('/board', {headers: {'Authorization' : `Bearer ${props.token}`}})
             const data = await response.data.board
             console.log(data)
             return data
@@ -34,7 +34,28 @@ const Board = (props) => {
         fetchBoards().then(
             data => setState(data)
         )
-    }, [])
+    }, [props.token])
+
+    const saveBoard = async () => {
+        const response = await axios.post('/board',{
+             headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization" : "Bearer " + props.token
+                },
+            body: JSON.stringify(state)
+        })
+        const data = await response.json()
+        console.log(props.token)
+        return data
+    }
+
+
+
+    useEffect(() => {
+        if (state !== initialData) {
+             saveBoard();
+        }
+    }, [state])
 
     const onDragEnd = (results) => {
         const { destination, source, draggableId, type } = results;
