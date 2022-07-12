@@ -3,8 +3,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import Board from "./components/Board";
-import { BrowserRouter, Routes, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -15,13 +17,21 @@ const getToken = () => {
 };
 
 const App = () => {
-  const [token, setToken] = useState(
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTc1NDAzMzksImlhdCI6MTY1NzUzODUzOSwic2NvcGUiOiJhY2Nlc3NfdG9rZW4iLCJzdWIiOiIxIn0.izbjTLHHYv2fcVGYMdwuxUZ1TEGcNhqu6SU3uTTJvQU"
-  ); //useState(() => getToken());
+  const [token, setToken] = useState(() => getToken());
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Board token={token} />}></Route>
+        <Route
+          path="/"
+          element={
+            !token ? <Login setToken={setToken} /> : <Board token={token} />
+          }
+        ></Route>
+        <Route path="/login" element={<Login setToken={setToken} />}></Route>
+        <Route
+          path="/register"
+          element={<Register setToken={setToken} />}
+        ></Route>
       </Routes>
     </BrowserRouter>
   );

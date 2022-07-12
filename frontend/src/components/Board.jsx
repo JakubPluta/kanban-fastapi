@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import Column from "./Column";
 import AddColumn from './AddColumn';
-
+import Logout from "./Logout";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 const Container = styled.div`
@@ -37,14 +37,14 @@ const Board = (props) => {
     }, [props.token])
 
     const saveBoard = async () => {
-        const response = await axios.post('/board',{
+        const response = await axios.post('/board', state, {
              headers: {
                     'Content-Type': 'application/json',
                     "Authorization" : "Bearer " + props.token
                 },
-            body: JSON.stringify(state)
         })
-        const data = await response.json()
+        const data = await response.data
+        console.log(data)
         console.log(props.token)
         return data
     }
@@ -155,7 +155,8 @@ const Board = (props) => {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-             <AddColumn state={state} setState={setState} />
+            <AddColumn state={state} setState={setState} />
+            <Logout />
             <Droppable droppableId="all-columns" direction="horizontal" type="column">
                 {provided => (
                 <Container {...provided.droppableProps} ref={provided.innerRef}>
